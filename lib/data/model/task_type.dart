@@ -1,0 +1,1 @@
+enum TaskType {goal, task, event}

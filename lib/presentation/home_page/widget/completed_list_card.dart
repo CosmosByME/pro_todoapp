@@ -1,0 +1,36 @@
+import 'package:flutter/material.dart';
+import 'package:pro_todoapp/data/model/to_do.dart';
+import 'package:pro_todoapp/presentation/home_page/widget/not_completed_tile.dart';
+
+class CompletedListCard extends StatelessWidget {
+  final List<ToDo> toDos;
+
+  const CompletedListCard({super.key, required this.toDos});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 0, // Clean design looks flat with subtle contrast
+      color: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      clipBehavior: Clip.antiAlias,
+      child: ListView.separated(
+        shrinkWrap: true, // Crucial inside SingleChildScrollView
+        physics: const NeverScrollableScrollPhysics(), // Disables inner fight for scroll gesture
+        padding: EdgeInsets.zero,
+        itemCount: toDos.length,
+        itemBuilder: (context, index) {
+          final toDo = toDos[index];
+          return NotCompletedTile(toDo: toDo);
+        },
+        separatorBuilder: (context, index) {
+          return const Divider(
+            height: 1,
+            thickness: 1,
+            color: Color(0xFFF1F5F9), // Light separation borders
+          );
+        },
+      ),
+    );
+  }
+}
