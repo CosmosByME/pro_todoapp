@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:pro_todoapp/core/services/internet_connection_service.dart';
 import 'package:pro_todoapp/presentation/home_page/bloc/home_bloc.dart';
 import 'package:pro_todoapp/presentation/home_page/widget/completed_list_card.dart';
 import 'package:pro_todoapp/presentation/home_page/widget/not_completed_list_card.dart';
@@ -98,6 +100,37 @@ class _HomePageState extends State<HomePage> {
             color: Colors.white,
           ),
         ),
+        actionsPadding: const EdgeInsets.only(right: 16.0),
+        actions: [
+          StreamBuilder(
+            stream: connectionService.onStatusChange,
+            builder: (context, asyncSnapshot) {
+              if (asyncSnapshot.hasData) {
+                final status = asyncSnapshot.data!;
+                if (status == InternetConnectionStatus.connected) {
+                  return const Icon(
+                    Icons.wifi,
+                    color: Colors.greenAccent,
+                    size: 30,
+                  );
+                } else if (status == InternetConnectionStatus.slow) {
+                  return const Icon(
+                    Icons.wifi,
+                    color: Colors.orangeAccent,
+                    size: 30,
+                  );
+                } else {
+                  return const Icon(
+                    Icons.wifi_off,
+                    color: Colors.redAccent,
+                    size: 30,
+                  );
+                }
+              }
+              return const SizedBox.shrink();
+            },
+          ),
+        ],
         bottom: PreferredSize(
           preferredSize: Size(double.infinity, 50),
           child: Container(

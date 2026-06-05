@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:pro_todoapp/core/services/internet_connection_service.dart';
 import 'package:pro_todoapp/data/model/to_do.dart';
 import 'package:pro_todoapp/presentation/home_page/bloc/home_bloc.dart';
 import 'package:pro_todoapp/presentation/todo_page/bloc/todo_bloc.dart';
@@ -139,6 +141,45 @@ class _TodoEditPageState extends State<TodoEditPage> {
             color: Colors.white,
           ),
         ),
+        actionsPadding: const EdgeInsets.only(right: 16.0),
+        actions: [
+          SizedBox(
+            width:
+                40, // 1. Lock a specific width so the AppBar allocates space instantly
+            child: StreamBuilder<InternetConnectionStatus>(
+              // 2. Fetch the current connection state as initial data to prevent immediate layout collapse
+              initialData: InternetConnectionStatus.connected,
+              stream: connectionService.onStatusChange,
+              builder: (context, asyncSnapshot) {
+                // Now hasData will always evaluate properly on frame #1
+                if (asyncSnapshot.hasData) {
+                  final status = asyncSnapshot.data!;
+                  if (status == InternetConnectionStatus.connected) {
+                    return const Icon(
+                      Icons.wifi,
+                      color: Colors.greenAccent,
+                      size: 30,
+                    );
+                  } else if (status == InternetConnectionStatus.slow) {
+                    return const Icon(
+                      Icons.wifi,
+                      color: Colors.orangeAccent,
+                      size: 30,
+                    );
+                  } else {
+                    return const Icon(
+                      Icons.wifi_off,
+                      color: Colors.redAccent,
+                      size: 30,
+                    );
+                  }
+                }
+                // Fallback icon just in case the snapshot is physically waiting
+                return const Icon(Icons.wifi, color: Colors.white24, size: 30);
+              },
+            ),
+          ),
+        ],
         bottom: const PreferredSize(
           preferredSize: Size.fromHeight(24),
           child: SizedBox(),

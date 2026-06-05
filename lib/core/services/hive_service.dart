@@ -4,10 +4,8 @@ import 'package:pro_todoapp/data/model/to_do.dart';
 class HiveService {
   HiveService._internal();
 
-  // 2. Static final instance initialized via the private constructor
   static final HiveService _instance = HiveService._internal();
 
-  // 3. Factory constructor that intercepts calls and returns the cached instance
   factory HiveService() {
     return _instance;
   }
@@ -34,8 +32,6 @@ class HiveService {
 
   List<ToDo> getNotCompletedTasks() {
     final box = Hive.box("not_completed_tasks");
-
-    // Convert box values safely to Map<String, dynamic> before creating the object
     return box.values
         .map((dynamic value) => ToDo.fromMap(Map<String, dynamic>.from(value)))
         .toList();
@@ -43,8 +39,6 @@ class HiveService {
 
   List<ToDo> getCompletedTasks() {
     final box = Hive.box("completed_tasks");
-
-    // Clean, modern, and type-safe approach
     return box.values
         .map((dynamic value) => ToDo.fromMap(Map<String, dynamic>.from(value)))
         .toList();
