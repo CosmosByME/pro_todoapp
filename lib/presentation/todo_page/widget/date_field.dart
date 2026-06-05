@@ -14,10 +14,24 @@ class DateField extends StatefulWidget {
 
 class _DateFieldState extends State<DateField> {
   void _selectDate() async {
-    String? selectedDate = await getDateFromUser(context, DateTime.parse(widget.controller.text));
+    DateTime? initialDate = _parseDate(widget.controller.text);
+    String? selectedDate = await getDateFromUser(context, initialDate);
     setState(() {
       widget.controller.text = selectedDate ?? "";
     });
+  }
+
+  DateTime? _parseDate(String dateString) {
+    final parts = dateString.split('/');
+    if (parts.length == 3) {
+      final day = int.tryParse(parts[0]);
+      final month = int.tryParse(parts[1]);
+      final year = int.tryParse(parts[2]);
+      if (day != null && month != null && year != null) {
+        return DateTime(year, month, day);
+      }
+    }
+    return null;
   }
 
   @override
