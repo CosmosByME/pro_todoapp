@@ -15,9 +15,16 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     on<TaskTypeChanged>((event, emit) async {
       await onTaskTypeChanged(event, emit);
     });
+
+    on<EditTodoEvent>((event, emit) async {
+      await onEditTodoEvent(event, emit);
+    });
   }
 
-  Future<void> onFormSubmitted(FormSubmitted event, Emitter<TodoState> emit) async {
+  Future<void> onFormSubmitted(
+    FormSubmitted event,
+    Emitter<TodoState> emit,
+  ) async {
     emit(TodoState(isLoading: true));
 
     final task = ToDo(
@@ -36,7 +43,29 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     emit(TodoState(isLoading: false, isCompleted: false));
   }
 
-  Future<void> onTaskTypeChanged(TaskTypeChanged event, Emitter<TodoState> emit) async {
+  Future<void> onTaskTypeChanged(
+    TaskTypeChanged event,
+    Emitter<TodoState> emit,
+  ) async {
     emit(TodoState(taskType: event.taskType));
+  }
+
+  Future<void> onEditTodoEvent(
+    EditTodoEvent event,
+    Emitter<TodoState> emit,
+  ) async {
+    emit(TodoState(isLoading: true));
+    await HiveService().deleteTask(event.toDoOriginal);
+
+    if (event.toDoEdited.isCompleted) {
+      await HiveService().completeTask(event.toDoEdited);
+    } else {
+      await HiveService().addTask(event.toDoEdited);
+    }
+
+    emit(TodoState(isLoading: false, isCompleted: true));
+
+    await Future.delayed(const Duration(seconds: 1));
+    emit(TodoState(isLoading: false, isCompleted: false));
   }
 }

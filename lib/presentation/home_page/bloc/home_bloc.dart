@@ -12,11 +12,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       fetchToDos(event, emit);
     });
 
-    on<CompleteToDoEvent>((event, emit) {
-      completeToDo(event, emit);
+    on<CompleteToDoEvent>((event, emit) async {
+      await completeToDo(event, emit);
     });
-    on<UnCompleteToDoEvent>((event, emit) {
-      unCompleteToDo(event, emit);
+    on<UnCompleteToDoEvent>((event, emit) async {
+      await unCompleteToDo(event, emit);
     });
     on<DeleteToDoEvent>((event, emit) async {
       await deleteToDo(event, emit);
@@ -44,27 +44,37 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
   }
 
-  void completeToDo(CompleteToDoEvent event, Emitter<HomeState> emit) {
+  Future<void> completeToDo(CompleteToDoEvent event, Emitter<HomeState> emit) async {
     HiveService().completeTask(event.toDo.copyWith(isCompleted: true));
-    emit(state.copyWith(
-      notCompletedTodos: List.from(state.notCompletedTodos)..remove(event.toDo),
-      completedTodos: List.from(state.completedTodos)..add(event.toDo.copyWith(isCompleted: true)),
-    ));
+    emit(
+      state.copyWith(
+        notCompletedTodos: List.from(state.notCompletedTodos)
+          ..remove(event.toDo),
+        completedTodos: List.from(state.completedTodos)
+          ..add(event.toDo.copyWith(isCompleted: true)),
+      ),
+    );
   }
 
-  void unCompleteToDo(UnCompleteToDoEvent event, Emitter<HomeState> emit) {
-    HiveService().addTask(event.toDo.copyWith(isCompleted: false));
-    emit(state.copyWith(
-      notCompletedTodos: List.from(state.notCompletedTodos)..add(event.toDo.copyWith(isCompleted: false)),
-      completedTodos: List.from(state.completedTodos)..remove(event.toDo),
-    ));
+  Future<void> unCompleteToDo(UnCompleteToDoEvent event, Emitter<HomeState> emit) async {
+    await HiveService().addTask(event.toDo.copyWith(isCompleted: false));
+    emit(
+      state.copyWith(
+        notCompletedTodos: List.from(state.notCompletedTodos)
+          ..add(event.toDo.copyWith(isCompleted: false)),
+        completedTodos: List.from(state.completedTodos)..remove(event.toDo),
+      ),
+    );
   }
 
   Future<void> deleteToDo(DeleteToDoEvent event, Emitter<HomeState> emit) async {
     await HiveService().deleteTask(event.toDo);
-    emit(state.copyWith(
-      notCompletedTodos: List.from(state.notCompletedTodos)..remove(event.toDo),
-      completedTodos: List.from(state.completedTodos)..remove(event.toDo),
-    ));
+    emit(
+      state.copyWith(
+        notCompletedTodos: List.from(state.notCompletedTodos)
+          ..remove(event.toDo),
+        completedTodos: List.from(state.completedTodos)..remove(event.toDo),
+      ),
+    );
   }
 }

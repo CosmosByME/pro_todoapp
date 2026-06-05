@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pro_todoapp/data/model/to_do.dart';
 import 'package:pro_todoapp/presentation/home_page/bloc/home_bloc.dart';
 import 'package:pro_todoapp/presentation/home_page/widget/not_completed_tile.dart';
+import 'package:pro_todoapp/presentation/todo_page/todo_edit_page.dart';
 
 class CompletedListCard extends StatelessWidget {
   final List<ToDo> toDos;
@@ -38,6 +39,17 @@ class CompletedListCard extends StatelessWidget {
                 ),
                 items: [
                   const PopupMenuItem(
+                    value: 'edit',
+                    child: ListTile(
+                      leading: Icon(Icons.edit, color: Colors.blueGrey),
+                      title: Text(
+                        'Edit Task',
+                        style: TextStyle(color: Colors.blueGrey),
+                      ),
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                  ),
+                  const PopupMenuItem(
                     value: 'delete',
                     child: ListTile(
                       leading: Icon(Icons.delete, color: Colors.red),
@@ -53,6 +65,14 @@ class CompletedListCard extends StatelessWidget {
                 if (value == 'delete') {
                   if (context.mounted) {
                     context.read<HomeBloc>().add(DeleteToDoEvent(toDo));
+                  }
+                } else if (value == 'edit') {
+                  if (context.mounted) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => TodoEditPage(toDo: toDo),
+                      ),
+                    );
                   }
                 }
               });

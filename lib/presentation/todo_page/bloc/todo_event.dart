@@ -29,3 +29,10 @@ class TaskTypeChanged extends TodoEvent {
 
   const TaskTypeChanged(this.taskType);
 }
+
+class EditTodoEvent extends TodoEvent {
+  final ToDo toDoOriginal;
+  final ToDo toDoEdited;
+
+  const EditTodoEvent(this.toDoOriginal, this.toDoEdited);
+}
