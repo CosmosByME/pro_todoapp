@@ -9,15 +9,15 @@ part 'todo_state.dart';
 
 class TodoBloc extends Bloc<TodoEvent, TodoState> {
   TodoBloc() : super(TodoState()) {
-    on<FormSubmitted>((event, emit) {
-      onFormSubmitted(event, emit);
+    on<FormSubmitted>((event, emit) async {
+      await onFormSubmitted(event, emit);
     });
-    on<TaskTypeChanged>((event, emit) {
-      onTaskTypeChanged(event, emit);
+    on<TaskTypeChanged>((event, emit) async {
+      await onTaskTypeChanged(event, emit);
     });
   }
 
-  void onFormSubmitted(FormSubmitted event, Emitter<TodoState> emit) async {
+  Future<void> onFormSubmitted(FormSubmitted event, Emitter<TodoState> emit) async {
     emit(TodoState(isLoading: true));
 
     final task = ToDo(
@@ -36,7 +36,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     emit(TodoState(isLoading: false, isCompleted: false));
   }
 
-  void onTaskTypeChanged(TaskTypeChanged event, Emitter<TodoState> emit) {
+  Future<void> onTaskTypeChanged(TaskTypeChanged event, Emitter<TodoState> emit) async {
     emit(TodoState(taskType: event.taskType));
   }
 }

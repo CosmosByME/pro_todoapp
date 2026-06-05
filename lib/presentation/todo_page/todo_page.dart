@@ -204,8 +204,10 @@ class _TodoPageState extends State<TodoPage> {
                                     ? SizedBox(
                                         height: 24,
                                         width: 24,
-                                        child:
-                                            const CircularProgressIndicator(),
+                                        child: const CircularProgressIndicator(
+                                          color: Colors.white,
+                                          strokeWidth: 2,
+                                        ),
                                       )
                                     : Text(
                                         "Save Task",

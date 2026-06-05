@@ -119,6 +119,30 @@ class _HomePageState extends State<HomePage> {
         builder: (context, state) {
           if (state.isLoading) {
             return const SkeletonPage();
+          } else if (state.notCompletedTodos.isEmpty &&
+              state.completedTodos.isEmpty) {
+            return Center(
+              child: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withAlpha(26),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Text(
+                  "No tasks yet! Tap the + button to add your first task.",
+                  style: TextStyle(fontSize: 16, color: Colors.black),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            );
           }
           return SingleChildScrollView(
             // Safely handles physics over screen bounds
@@ -146,14 +170,14 @@ class _HomePageState extends State<HomePage> {
 
                       // Completed Header Title Label
                       if (state.completedTodos.isNotEmpty)
-                      const Text(
-                        "Completed",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
+                        const Text(
+                          "Completed",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
                         ),
-                      ),
 
                       const SizedBox(height: 12),
 
