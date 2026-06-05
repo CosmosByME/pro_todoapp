@@ -12,31 +12,29 @@ class CompletedListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 0, // Clean design looks flat with subtle contrast
+      elevation: 0, 
       color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       clipBehavior: Clip.antiAlias,
       child: ListView.separated(
-        shrinkWrap: true, // Crucial inside SingleChildScrollView
+        shrinkWrap: true, 
         physics:
-            const NeverScrollableScrollPhysics(), // Disables inner fight for scroll gesture
+            const NeverScrollableScrollPhysics(),
         padding: EdgeInsets.zero,
         itemCount: toDos.length,
         itemBuilder: (context, index) {
           final toDo = toDos[index];
           return GestureDetector(
             onLongPressStart: (LongPressStartDetails details) {
-              // 1. Capture the exact screen coordinates of the long press
               final offset = details.globalPosition;
-
-              // 2. Show the context menu at that location
               showMenu(
+                color: Colors.white,
                 context: context,
                 position: RelativeRect.fromLTRB(
-                  offset.dx, // Left boundary
-                  offset.dy, // Top boundary
-                  offset.dx + 1, // Right boundary
-                  offset.dy + 1, // Bottom boundary
+                  offset.dx, 
+                  offset.dy, 
+                  offset.dx + 1, 
+                  offset.dy + 1, 
                 ),
                 items: [
                   const PopupMenuItem(
@@ -66,7 +64,7 @@ class CompletedListCard extends StatelessWidget {
           return const Divider(
             height: 1,
             thickness: 1,
-            color: Color(0xFFF1F5F9), // Light separation borders
+            color: Color(0xFFF1F5F9),
           );
         },
       ),

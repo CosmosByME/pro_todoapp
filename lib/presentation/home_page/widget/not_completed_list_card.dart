@@ -28,6 +28,7 @@ class NotCompletedListCard extends StatelessWidget {
             onLongPressStart: (details) {
               final offset = details.globalPosition;
               showMenu(
+                color: Colors.white,
                 context: context,
                 position: RelativeRect.fromLTRB(
                   offset.dx, 
