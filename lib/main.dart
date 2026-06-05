@@ -22,8 +22,6 @@ void main() async {
       showErrorToast('No internet connection');
     } else if (status == InternetConnectionStatus.slow) {
       showWarningToast('Slow internet connection');
-    } else {
-      showErrorToast('Nothing');
     }
   });
   runApp(const MyApp());

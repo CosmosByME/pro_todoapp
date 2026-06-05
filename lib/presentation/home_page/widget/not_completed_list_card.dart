@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pro_todoapp/data/model/to_do.dart';
@@ -70,7 +71,7 @@ class NotCompletedListCard extends StatelessWidget {
                 if (value == 'edit') {
                   if (context.mounted) {
                     Navigator.of(context).push(
-                      MaterialPageRoute(
+                      CupertinoPageRoute(
                         builder: (context) => TodoEditPage(toDo: toDo),
                       ),
                     );
