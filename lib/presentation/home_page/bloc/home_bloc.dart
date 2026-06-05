@@ -18,6 +18,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<UnCompleteToDoEvent>((event, emit) {
       unCompleteToDo(event, emit);
     });
+    on<DeleteToDoEvent>((event, emit) async {
+      await deleteToDo(event, emit);
+    });
   }
 
   Future<void> fetchToDos(
@@ -53,6 +56,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     HiveService().addTask(event.toDo.copyWith(isCompleted: false));
     emit(state.copyWith(
       notCompletedTodos: List.from(state.notCompletedTodos)..add(event.toDo.copyWith(isCompleted: false)),
+      completedTodos: List.from(state.completedTodos)..remove(event.toDo),
+    ));
+  }
+
+  Future<void> deleteToDo(DeleteToDoEvent event, Emitter<HomeState> emit) async {
+    await HiveService().deleteTask(event.toDo);
+    emit(state.copyWith(
+      notCompletedTodos: List.from(state.notCompletedTodos)..remove(event.toDo),
       completedTodos: List.from(state.completedTodos)..remove(event.toDo),
     ));
   }

@@ -49,4 +49,9 @@ class HiveService {
         .map((dynamic value) => ToDo.fromMap(Map<String, dynamic>.from(value)))
         .toList();
   }
+
+  Future<void> deleteTask(ToDo task) async {
+    await Hive.box("not_completed_tasks").delete("${task.day}|${task.time}");
+    await Hive.box("completed_tasks").delete("${task.day}|${task.time}");
+  }
 }

@@ -26,3 +26,12 @@ final class UnCompleteToDoEvent extends HomeEvent {
   @override
   List<Object> get props => [toDo];
 }
+
+final class DeleteToDoEvent extends HomeEvent {
+  final ToDo toDo;
+
+  const DeleteToDoEvent(this.toDo);
+
+  @override
+  List<Object> get props => [toDo];
+}
