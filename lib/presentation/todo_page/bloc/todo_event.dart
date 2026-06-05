@@ -1,7 +1,12 @@
 part of 'todo_bloc.dart';
 
-@immutable
-sealed class TodoEvent {}
+
+sealed class TodoEvent extends Equatable {
+  const TodoEvent();
+
+  @override
+  List<Object> get props => [];
+}
 
 class FormSubmitted extends TodoEvent {
   final String title;
@@ -10,7 +15,7 @@ class FormSubmitted extends TodoEvent {
   final String time;
   final TaskType taskType;
 
-  FormSubmitted({
+  const FormSubmitted({
     required this.title,
     required this.description,
     required this.day,
@@ -22,5 +27,5 @@ class FormSubmitted extends TodoEvent {
 class TaskTypeChanged extends TodoEvent {
   final TaskType taskType;
 
-  TaskTypeChanged(this.taskType);
+  const TaskTypeChanged(this.taskType);
 }

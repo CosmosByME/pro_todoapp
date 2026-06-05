@@ -8,17 +8,13 @@ import 'package:pro_todoapp/presentation/home_page/bloc/home_bloc.dart';
 class NotCompletedTile extends StatefulWidget {
   final ToDo toDo;
 
-  const NotCompletedTile({
-    super.key,
-    required this.toDo,
-  });
+  const NotCompletedTile({super.key, required this.toDo});
 
   @override
   State<NotCompletedTile> createState() => _NotCompletedTileState();
 }
 
 class _NotCompletedTileState extends State<NotCompletedTile> {
-
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -36,27 +32,37 @@ class _NotCompletedTileState extends State<NotCompletedTile> {
             fontWeight: FontWeight.w600,
             fontSize: 16,
             color: widget.toDo.isCompleted ? Colors.grey : Colors.black87,
-            decoration: widget.toDo.isCompleted ? TextDecoration.lineThrough : null,
+            decoration: widget.toDo.isCompleted
+                ? TextDecoration.lineThrough
+                : null,
           ),
         ),
         subtitle: Padding(
           padding: const EdgeInsets.only(top: 4.0),
           child: Text(
-            widget.toDo.description,
+            "${widget.toDo.day} | ${widget.toDo.time}",
             style: TextStyle(
               fontSize: 12,
-              color: widget.toDo.isCompleted ? Colors.grey.shade400 : Colors.grey,
+              color: widget.toDo.isCompleted
+                  ? Colors.grey.shade400
+                  : Colors.grey,
+              decoration: widget.toDo.isCompleted
+                  ? TextDecoration.lineThrough
+                  : null,
             ),
           ),
         ),
         // Fix: Clean standard Checkbox bounded cleanly in size parameters
         trailing: Transform.scale(
-          scale: 1.1, // Gives a comfortable click feel from the design specification
+          scale:
+              1.1, // Gives a comfortable click feel from the design specification
           child: Checkbox(
             value: widget.toDo.isCompleted,
             activeColor: const Color(0xFF4A3780),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(4), // Slightly square rounded edges
+              borderRadius: BorderRadius.circular(
+                4,
+              ), // Slightly square rounded edges
             ),
             onChanged: (newValue) {
               if (newValue == false) {

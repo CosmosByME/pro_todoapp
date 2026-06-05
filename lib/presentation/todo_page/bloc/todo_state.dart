@@ -6,7 +6,7 @@ class TodoState extends Equatable {
   final bool isCompleted;
 
   const TodoState({
-    this.taskType = TaskType.event,
+    this.taskType = TaskType.task,
     this.isLoading = false,
     this.isCompleted = false,
   });

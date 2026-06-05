@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:pro_todoapp/core/services/hive_service.dart';
 import 'package:pro_todoapp/data/model/task_type.dart';
 import 'package:pro_todoapp/data/model/to_do.dart';
@@ -10,8 +9,12 @@ part 'todo_state.dart';
 
 class TodoBloc extends Bloc<TodoEvent, TodoState> {
   TodoBloc() : super(TodoState()) {
-    on<FormSubmitted>(onFormSubmitted);
-    on<TaskTypeChanged>(onTaskTypeChanged);
+    on<FormSubmitted>((event, emit) {
+      onFormSubmitted(event, emit);
+    });
+    on<TaskTypeChanged>((event, emit) {
+      onTaskTypeChanged(event, emit);
+    });
   }
 
   void onFormSubmitted(FormSubmitted event, Emitter<TodoState> emit) async {

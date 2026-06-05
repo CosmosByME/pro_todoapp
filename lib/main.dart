@@ -9,6 +9,7 @@ import 'package:pro_todoapp/presentation/todo_page/bloc/todo_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Bloc.observer = CustomBlocObserver();
   await HiveService().initialize();
   runApp(const MyApp());
 }
@@ -30,5 +31,13 @@ class MyApp extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class CustomBlocObserver extends BlocObserver {
+  @override
+  void onTransition(Bloc bloc, Transition transition) {
+    super.onTransition(bloc, transition);
+    debugPrint('Transition: $transition');
   }
 }

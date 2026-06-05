@@ -32,7 +32,7 @@ class _TimeFieldState extends State<TimeField> {
           ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 8),
-        TextField(
+        TextFormField(
           controller: widget.controller,
           inputFormatters: [mask],
           decoration: InputDecoration(
@@ -46,6 +46,12 @@ class _TimeFieldState extends State<TimeField> {
             ),
           ),
           keyboardType: TextInputType.number,
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return "Time is required";
+            }
+            return null;
+          },
         ),
       ],
     );

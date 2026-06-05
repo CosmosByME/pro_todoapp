@@ -17,6 +17,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
+  initState() {
+    super.initState();
+    context.read<HomeBloc>().add(FetchToDosEvent());
+  }
+
+  @override
   Widget build(BuildContext context) {
     const primaryColor = Color(0xFF4A3780);
 
@@ -134,13 +140,12 @@ class _HomePageState extends State<HomePage> {
                       const SizedBox(height: 16),
 
                       // Active Todos Card List
-                      NotCompletedListCard(
-                        toDos: state.notCompletedTodos,
-                      ),
+                      NotCompletedListCard(toDos: state.notCompletedTodos),
 
                       const SizedBox(height: 24),
 
                       // Completed Header Title Label
+                      if (state.completedTodos.isNotEmpty)
                       const Text(
                         "Completed",
                         style: TextStyle(
@@ -152,9 +157,7 @@ class _HomePageState extends State<HomePage> {
 
                       const SizedBox(height: 12),
 
-                      CompletedListCard(
-                        toDos: state.completedTodos,
-                      ),
+                      CompletedListCard(toDos: state.completedTodos),
 
                       const SizedBox(height: 16),
                     ],

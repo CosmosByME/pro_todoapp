@@ -11,15 +11,21 @@ class NotesField extends StatelessWidget {
       children: [
         Text(
           "Notes",
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w600),
+          style: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 8),
-        TextField(
+        TextFormField(
           controller: controller,
           maxLines: 6,
-          decoration: InputDecoration(
-            hintText: "Notes",
-          ),
+          decoration: InputDecoration(hintText: "Notes"),
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return "Notes are required";
+            }
+            return null;
+          },
         ),
       ],
     );
