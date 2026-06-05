@@ -1,7 +1,6 @@
 import 'package:pro_todoapp/data/model/task_type.dart';
 
 class ToDo {
-  final String id;
   final TaskType taskType;
   final String title;
   final String description;
@@ -10,7 +9,6 @@ class ToDo {
   final bool isCompleted;
 
   ToDo({
-    required this.id,
     required this.title,
     required this.description,
     required this.day,
@@ -20,19 +18,18 @@ class ToDo {
   });
 
   ToDo copyWith({
-    String? id,
     String? title,
     String? description,
-    DateTime? dueDate,
     bool? isCompleted,
+    String? day,
+    String? time,
     TaskType? taskType,
   }) {
     return ToDo(
-      id: id ?? this.id,
       title: title ?? this.title,
       description: description ?? this.description,
-      day: day,
-      time: time,
+      day: day ?? this.day,
+      time: time ?? this.time,
       isCompleted: isCompleted ?? this.isCompleted,
       taskType: taskType ?? this.taskType,
     );
@@ -40,7 +37,6 @@ class ToDo {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'title': title,
       'description': description,
       'day': day,
@@ -52,7 +48,6 @@ class ToDo {
 
   factory ToDo.fromMap(Map<String, dynamic> map) {
     return ToDo(
-      id: map['id'] ?? '',
       title: map['title'] ?? '',
       description: map['description'] ?? '',
       day: map['day'] ?? '',

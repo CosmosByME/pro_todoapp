@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pro_todoapp/core/main_widgets/category_badges.dart';
 import 'package:pro_todoapp/data/model/task_type.dart';
 import 'package:pro_todoapp/data/model/to_do.dart';
+import 'package:pro_todoapp/presentation/home_page/bloc/home_bloc.dart';
 
 class NotCompletedTile extends StatefulWidget {
   final ToDo toDo;
@@ -16,7 +18,6 @@ class NotCompletedTile extends StatefulWidget {
 }
 
 class _NotCompletedTileState extends State<NotCompletedTile> {
-  bool value = false;
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +35,8 @@ class _NotCompletedTileState extends State<NotCompletedTile> {
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 16,
-            color: value ? Colors.grey : Colors.black87,
-            decoration: value ? TextDecoration.lineThrough : null,
+            color: widget.toDo.isCompleted ? Colors.grey : Colors.black87,
+            decoration: widget.toDo.isCompleted ? TextDecoration.lineThrough : null,
           ),
         ),
         subtitle: Padding(
@@ -44,7 +45,7 @@ class _NotCompletedTileState extends State<NotCompletedTile> {
             widget.toDo.description,
             style: TextStyle(
               fontSize: 12,
-              color: value ? Colors.grey.shade400 : Colors.grey,
+              color: widget.toDo.isCompleted ? Colors.grey.shade400 : Colors.grey,
             ),
           ),
         ),
@@ -52,15 +53,17 @@ class _NotCompletedTileState extends State<NotCompletedTile> {
         trailing: Transform.scale(
           scale: 1.1, // Gives a comfortable click feel from the design specification
           child: Checkbox(
-            value: value,
+            value: widget.toDo.isCompleted,
             activeColor: const Color(0xFF4A3780),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(4), // Slightly square rounded edges
             ),
             onChanged: (newValue) {
-              setState(() {
-                value = newValue ?? false;
-              });
+              if (newValue == false) {
+                context.read<HomeBloc>().add(UnCompleteToDoEvent(widget.toDo));
+              } else {
+                context.read<HomeBloc>().add(CompleteToDoEvent(widget.toDo));
+              }
             },
           ),
         ),

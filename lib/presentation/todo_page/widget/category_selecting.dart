@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pro_todoapp/core/main_widgets/category_badges.dart';
+import 'package:pro_todoapp/data/model/task_type.dart';
+import 'package:pro_todoapp/presentation/todo_page/bloc/todo_bloc.dart';
 
 class CategorySelecting extends StatefulWidget {
   const CategorySelecting({super.key});
@@ -26,6 +29,7 @@ class _CategorySelectingState extends State<CategorySelecting> {
             setState(() {
               selectedCategoryIndex = 0;
             });
+            context.read<TodoBloc>().add(TaskTypeChanged(TaskType.task));
           },
           child: Container(
             clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -47,6 +51,7 @@ class _CategorySelectingState extends State<CategorySelecting> {
             setState(() {
               selectedCategoryIndex = 1;
             });
+            context.read<TodoBloc>().add(TaskTypeChanged(TaskType.event));
           },
           child: Container(
             clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -68,6 +73,7 @@ class _CategorySelectingState extends State<CategorySelecting> {
             setState(() {
               selectedCategoryIndex = 2;
             });
+            context.read<TodoBloc>().add(TaskTypeChanged(TaskType.goal));
           },
           child: Container(
             clipBehavior: Clip.antiAliasWithSaveLayer,

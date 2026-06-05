@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pro_todoapp/presentation/todo_page/bloc/todo_bloc.dart';
 import 'package:pro_todoapp/presentation/todo_page/widget/category_selecting.dart';
 import 'package:pro_todoapp/presentation/todo_page/widget/date_field.dart';
 import 'package:pro_todoapp/presentation/todo_page/widget/notes_field.dart';
@@ -36,8 +38,9 @@ class _TodoPageState extends State<TodoPage> {
           child: Stack(
             children: [
               // Background base color
-              Container(color: const Color(0xFF4A3780)), // Your primary purple hex
-
+              Container(
+                color: const Color(0xFF4A3780),
+              ), // Your primary purple hex
               // Left overlapping circles
               Positioned(
                 left: -100,
@@ -128,62 +131,94 @@ class _TodoPageState extends State<TodoPage> {
           child: SizedBox(),
         ),
       ),
-      body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: constraints.maxHeight - 24.0,
-                ),
-                child: IntrinsicHeight(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      TaskTitleField(controller: titleController),
-                      const SizedBox(height: 20),
-
-                      const SizedBox(height: 8),
-                      CategorySelecting(),
-                      const SizedBox(height: 24),
-
-                      Row(
-                        children: [
-                          Expanded(
-                            child: DateField(controller: dateController),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: TimeField(controller: timeController),
-                          ),
-                        ],
+      body: BlocListener<TodoBloc, TodoState>(
+        listener: (context, state) {
+          Navigator.of(context).pop();
+        },
+        child: SafeArea(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20.0,
+                      vertical: 20.0,
+                    ),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight: constraints.maxHeight - 24.0,
                       ),
-                      const SizedBox(height: 24),
-
-                      NotesField(controller: notesController),
-
-                      const Spacer(),
-                      const SizedBox(height: 32),
-
-                      ElevatedButton(
-                        onPressed: () {},
-                        child: Text(
-                          "Save Task",
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          ),
+                      child: IntrinsicHeight(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            TaskTitleField(controller: titleController),
+                            const SizedBox(height: 20),
+      
+                            const SizedBox(height: 8),
+                            CategorySelecting(),
+                            const SizedBox(height: 24),
+      
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: DateField(controller: dateController),
+                                ),
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: TimeField(controller: timeController),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 24),
+      
+                            NotesField(controller: notesController),
+      
+                            const Spacer(),
+                            const SizedBox(height: 32),
+      
+                            BlocBuilder<TodoBloc, TodoState>(
+                              builder: (context, state) {
+                                return ElevatedButton(
+                                  onPressed: () {
+                                    final taskType = state.taskType;
+                                    context.read<TodoBloc>().add(
+                                      FormSubmitted(
+                                        title: titleController.text,
+                                        description: notesController.text,
+                                        day: dateController.text,
+                                        time: timeController.text,
+                                        taskType: taskType,
+                                      ),
+                                    );
+                                  },
+                                  child: state.isLoading
+                                      ? SizedBox(
+                                          height: 24,
+                                          width: 24,
+                                          child: const CircularProgressIndicator(),
+                                        )
+                                      : Text(
+                                          "Save Task",
+                                          style: Theme.of(context).textTheme.bodyLarge
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.w600,
+                                                color: Theme.of(
+                                                  context,
+                                                ).colorScheme.onPrimary,
+                                              ),
+                                        ),
+                                );
+                              },
+                            ),
+                            SizedBox(height: 16),
+                          ],
                         ),
                       ),
-                      SizedBox(height: 16),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                },
               ),
-            );
-          },
-        ),
+            ),
       ),
     );
   }

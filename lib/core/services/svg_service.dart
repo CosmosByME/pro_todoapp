@@ -17,7 +17,9 @@ class SvgService {
       getIcon(name),
       width: width,
       height: height,
-      color: color,
+      colorFilter: color != null
+          ? ColorFilter.mode(color, BlendMode.srcIn)
+          : null,
     );
   }
 }
