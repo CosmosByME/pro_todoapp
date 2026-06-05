@@ -36,7 +36,6 @@ class _HomePageState extends State<HomePage> {
           child: Stack(
             children: [
               Container(color: primaryColor),
-              // Left overlapping circles
               Positioned(
                 left: -100,
                 top: 30,
@@ -61,7 +60,6 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              // Right overlapping circles
               Positioned(
                 right: -90,
                 bottom: -30,
@@ -104,6 +102,7 @@ class _HomePageState extends State<HomePage> {
         actions: [
           StreamBuilder(
             stream: connectionService.onStatusChange,
+          
             builder: (context, asyncSnapshot) {
               if (asyncSnapshot.hasData) {
                 final status = asyncSnapshot.data!;

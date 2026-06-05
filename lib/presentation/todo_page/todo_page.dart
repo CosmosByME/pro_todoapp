@@ -22,6 +22,7 @@ class _TodoPageState extends State<TodoPage> {
   final TextEditingController timeController = TextEditingController();
   final TextEditingController titleController = TextEditingController();
   final TextEditingController notesController = TextEditingController();
+  late bool connected = false;
 
   @override
   void dispose() {
@@ -30,6 +31,19 @@ class _TodoPageState extends State<TodoPage> {
     titleController.dispose();
     notesController.dispose();
     super.dispose();
+  }
+
+@override
+  initState() {
+    super.initState();
+   checkConnection();
+  }
+
+  Future checkConnection() async {
+    final status = await connectionService.connectionStatus;
+    setState(() {
+      connected = status == InternetConnectionStatus.connected;
+    });
   }
 
   final formKey = GlobalKey<FormState>();
@@ -42,11 +56,9 @@ class _TodoPageState extends State<TodoPage> {
         flexibleSpace: ClipRRect(
           child: Stack(
             children: [
-              // Background base color
               Container(
                 color: const Color(0xFF4A3780),
-              ), // Your primary purple hex
-              // Left overlapping circles
+              ), 
               Positioned(
                 left: -100,
                 top: 30,
@@ -55,7 +67,7 @@ class _TodoPageState extends State<TodoPage> {
                   height: 200,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white.withAlpha(20), // Soft outer circle
+                    color: Colors.white.withAlpha(20), 
                   ),
                 ),
               ),
@@ -67,12 +79,11 @@ class _TodoPageState extends State<TodoPage> {
                   height: 140,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Color(0xFF4A3780), // Soft inner circle
+                    color: Color(0xFF4A3780),
                   ),
                 ),
               ),
 
-              // Right overlapping circles
               Positioned(
                 right: -90,
                 bottom: -30,
@@ -104,44 +115,7 @@ class _TodoPageState extends State<TodoPage> {
         elevation: 0,
         centerTitle: true,
         leadingWidth: 56,
-        actionsPadding: const EdgeInsets.only(right: 16.0),
-actions: [
-  SizedBox(
-    width: 40, // 1. Lock a specific width so the AppBar allocates space instantly
-    child: StreamBuilder<InternetConnectionStatus>(
-      // 2. Fetch the current connection state as initial data to prevent immediate layout collapse
-      initialData: InternetConnectionStatus.connected, 
-      stream: connectionService.onStatusChange,
-      builder: (context, asyncSnapshot) {
-        // Now hasData will always evaluate properly on frame #1
-        if (asyncSnapshot.hasData) {
-          final status = asyncSnapshot.data!;
-          if (status == InternetConnectionStatus.connected) {
-            return const Icon(
-              Icons.wifi,
-              color: Colors.greenAccent,
-              size: 30,
-            );
-          } else if (status == InternetConnectionStatus.slow) {
-            return const Icon(
-              Icons.wifi,
-              color: Colors.orangeAccent,
-              size: 30,
-            );
-          } else {
-            return const Icon(
-              Icons.wifi_off,
-              color: Colors.redAccent,
-              size: 30,
-            );
-          }
-        }
-        // Fallback icon just in case the snapshot is physically waiting
-        return const Icon(Icons.wifi, color: Colors.white24, size: 30);
-      },
-    ),
-  ),
-],
+      
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
           child: GestureDetector(

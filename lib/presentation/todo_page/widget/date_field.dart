@@ -14,7 +14,7 @@ class DateField extends StatefulWidget {
 
 class _DateFieldState extends State<DateField> {
   void _selectDate() async {
-    String? selectedDate = await getDateFromUser(context);
+    String? selectedDate = await getDateFromUser(context, DateTime.parse(widget.controller.text));
     setState(() {
       widget.controller.text = selectedDate ?? "";
     });
@@ -63,10 +63,10 @@ final mask = MaskTextInputFormatter(
   filter: {"#": RegExp(r'[0-9]')},
 );
 
-Future<String?> getDateFromUser(BuildContext context) async {
+Future<String?> getDateFromUser(BuildContext context, DateTime? initialDate) async {
   final DateTime? pickedDate = await showDatePicker(
     context: context,
-    initialDate: DateTime.now(),
+    initialDate: initialDate ?? DateTime.now(),
     firstDate: DateTime.now(),
     lastDate: DateTime(2101),
   );

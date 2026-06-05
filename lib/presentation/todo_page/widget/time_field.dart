@@ -14,10 +14,23 @@ class TimeField extends StatefulWidget {
 
 class _TimeFieldState extends State<TimeField> {
   void _selectTime() async {
-    String? selectedTime = await getTimeFromUser(context);
+    TimeOfDay? initialTime = _parseTime(widget.controller.text);
+    String? selectedTime = await getTimeFromUser(context, initialTime);
     setState(() {
       widget.controller.text = selectedTime ?? "";
     });
+  }
+
+  TimeOfDay? _parseTime(String timeString) {
+    final parts = timeString.split(':');
+    if (parts.length == 2) {
+      final hour = int.tryParse(parts[0]);
+      final minute = int.tryParse(parts[1]);
+      if (hour != null && minute != null) {
+        return TimeOfDay(hour: hour, minute: minute);
+      }
+    }
+    return null;
   }
 
   @override
@@ -63,10 +76,10 @@ final mask = MaskTextInputFormatter(
   filter: {"#": RegExp(r'[0-9]')},
 );
 
-Future<String?> getTimeFromUser(BuildContext context) async {
+Future<String?> getTimeFromUser(BuildContext context, TimeOfDay? initialTime) async {
   TimeOfDay? selectedTime = await showTimePicker(
     context: context,
-    initialTime: TimeOfDay.now(),
+    initialTime: initialTime ?? TimeOfDay.now(),
     initialEntryMode: TimePickerEntryMode.inputOnly,
     builder: (context, child) {
       return MediaQuery(

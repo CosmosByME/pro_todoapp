@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Pro ToDo',
           theme: appTheme,
-          home: OnTap(child: const HomePage()),
+          home: OnTap(child: HomePage()),
         ),
       ),
     );
